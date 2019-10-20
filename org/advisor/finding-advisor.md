@@ -23,6 +23,7 @@ Gathered from the [NTNU project catalog](https://wiki.math.ntnu.no/student/oppga
     * Interesting project on creating recipes and wines. Ask about active learning.
     * Should mention loads of experience in Python and good knowledge of Tensorflow + Keras.
 * Answers
+* **Need to find out where he is**
 
 #### [Thiago Martins](https://wiki.math.ntnu.no/student/oppgavekatalog/guerrera)
 * Interested in sequential decision making under uncertainty. Open for suggestions about any related topics.
@@ -30,6 +31,9 @@ Gathered from the [NTNU project catalog](https://wiki.math.ntnu.no/student/oppga
     * Recurrent Neural Networks applied to Time-Series
     * SMC/Particle Filters applied to Time-Series
     * Reinforcement Learning
+* Questions
+* Answers
+* **Need to find out where he is**
 
 ### Computational Statistics
 
