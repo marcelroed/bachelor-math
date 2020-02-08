@@ -21,3 +21,19 @@ A representation space can obtain its structure from other rep. spaces to which 
 $$\Phi(T_gx) = T_g'\Phi(x),$$
 
 So transforming an input $x$ by $g$ ($T_gx$) then passing it through the learned map $\Phi$ should give the same result as first mapping $x$ through $\Phi$ and then transforming the representation. Note that $T$ and $T'$ need not be the same. We only need that for these operators any two transformations $g, h$ give $T(gh) = T(g)T(h)$ (so $T$ is a linear representation of $G$).
+
+$\Phi$ can be non-injective, meaning two identical vectors $x, y$ can be mapped to identical elements of the output space. In this case, for $\Phi$ to be equivariant, we need the $G$-transformed inputs $T_g x$ and $T_g y$ to be mapped to the same output. Their sameness is preserved under symmetry transformations.
+
+## 3. Related Work
+
+## 4. Mathematical Framework
+Simple and generic definition and analysis of G-CNNs for various groups $G$. Defining symmetry groups, study in particular two groups, take a look at functions on groups and their transformation properties.
+
+### 4.1 Symmetry Groups
+A symmetry of an object is a transformation that leaves the object invariant. For example flipping $\Z^2$ gives $\Z^2$ again.
+
+### 4.4 Functions on Groups
+Images and stacks of feature maps in a conventional CNN are modelled as functions $f: \Z^2 \to \mathbb{R}^K$.
+
+Nitation for a transformation $g$ acting on a set of feature maps:
+$$[L_gf](x) = [f \circ g^{-1}](x) = f(g^{-1})$$
