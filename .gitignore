@@ -378,3 +378,5 @@ TSWLatexianTemp*
 
 # Makeindex log files
 *.lpz
+
+**/.idea/
