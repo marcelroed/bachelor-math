@@ -10,3 +10,10 @@
 * Started on chapter on machine learning.
 
 ### Week 7
+
+##### Mon [0 pages]
+* Researched the methods used in the paper on harmonic convolutions.
+* Successfully create spheric harmonics, understood the radial profile that needs to be trained.
+* TODO: Understand how the radial profile can be multiplied into the spheric harmonic profile.
+
+
