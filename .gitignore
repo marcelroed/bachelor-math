@@ -379,4 +379,11 @@ TSWLatexianTemp*
 # Makeindex log files
 *.lpz
 
+# Ignore IDEA files
 **/.idea/
+
+# Ignore most pdfs
+*.pdf
+
+# Ignore data
+code/data/
