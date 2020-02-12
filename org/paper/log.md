@@ -16,4 +16,5 @@
 * Successfully create spheric harmonics, understood the radial profile that needs to be trained.
 * TODO: Understand how the radial profile can be multiplied into the spheric harmonic profile.
 
-
+##### Wed [1/2 page]
+* Machine learning intro
