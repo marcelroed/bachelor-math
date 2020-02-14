@@ -18,3 +18,7 @@
 
 ##### Wed [1/2 page]
 * Machine learning intro
+
+#### Thu [1/4 page]
+* Worked on plots for MNIST
+* Wrote a small amount about machine learning
