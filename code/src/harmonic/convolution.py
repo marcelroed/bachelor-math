@@ -53,16 +53,24 @@ class Conv2DH(keras.layers.Layer):
 
             filter_dict[in_m] = in_dict
 
-    def filter_from_weights(self, weights):
+    def filter_from_weights(self, weights: tf.Tensor, ms: tf.Tensor):
+        """Make filters from tensor of weights corresponding to rotation orders m. The final value in each weight row
+        represents the rotational offset β.
+
+        :param weights: tf.Tensor containing [m_order, N_weights + 1] trainable weights
+        :param ms: tf.Tensor containing [m_order] orders to use
+        """
         # Weights have shape [channels, fourier_depth]
-        ns = tf.constant(alternating_integers(weights.shape[1]))
+        ns = tf.constant(alternating_integers(weights.shape[1] - 1), dtype=c64)[tf.newaxis, tf.newaxis, :]
 
         linspace = tf.cast(tf.linspace(- self.k_size / 2, self.k_size / 2, self.k_size), c64)
         filter_grid = 1.j * linspace[:, tf.newaxis] + linspace[:, tf.newaxis]
 
         radii = tf.abs(filter_grid)
-        angles = tf.atan2(filter_grid.imag, filter_grid.real)
+        angles = tf.cast(tf.atan2(filter_grid.imag, filter_grid.real), dtype=c64)
 
+        exponentials = weights[:, :-1] * tf.exp(1.j * ns * radii)
+        filter_values = tf.reduce_sum(exponentials, axis=2) * tf.exp(1.j * m)
 
 
 
