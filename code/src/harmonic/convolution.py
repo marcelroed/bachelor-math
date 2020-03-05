@@ -53,6 +53,8 @@ class Conv2DH(keras.layers.Layer):
 
             filter_dict[in_m] = in_dict
 
+        return filter_dict
+
     def filter_from_weights(self, weights: tf.Tensor, ms: tf.Tensor):
         """Make filters from tensor of weights corresponding to rotation orders m. The final value in each weight row
         represents the rotational offset β.
