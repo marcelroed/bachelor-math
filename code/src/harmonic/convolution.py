@@ -1,13 +1,16 @@
+from itertools import product
+from typing import Optional
+from collections import defaultdict as dd
+
 import tensorflow as tf
+from tensorflow import newaxis
 import tensorflow.keras as keras
 from tensorflow import complex64 as c64, float32 as f32
 import numpy as np
 
-from typing import Optional
-
 
 class Conv2DH(keras.layers.Layer):
-    def __init__(self, k_size=5, out_orders=(0, ), out_channels=1, fourier_depth=5, **kwargs):
+    def __init__(self, k_size=5, out_orders=1, out_channels=1, fourier_depth=5, **kwargs):
         super(Conv2DH, self).__init__(**kwargs)
 
         self.k_size = k_size
@@ -31,16 +34,30 @@ class Conv2DH(keras.layers.Layer):
         super(Conv2DH, self).build(input_shape)
 
     def call(self, x, **kwargs):
+        """
+        Perform the
+        :param x: input tensor of shape [batch_size, height, width, n_channels, n_streams]
+        :param kwargs: Additional parameters (not used)
+        :return:
+        """
         filters = self.generate_filters()
 
-        convolved = tf.nn.conv2d(x, filters, strides=(1, 1), padding='same')
+        stream_lists = dd(list)
+        for in_stream, out_stream in product(range(self.in_orders), range(self.out_orders)):
+            delta_m = out_stream - in_stream
+            stream_lists[out_stream].append(
+                tf.nn.conv2d(x[..., in_stream, newaxis], filters[delta_m], strides=(1, 1), padding='same'))
+
+        streams = [tf.concat(l, axis=3) for l in stream_lists]
+        convolved = tf.concat(streams, axis=4)
+
         return convolved
 
     def compute_output_shape(self, input_shape):
         # Previous sizes
-        width, height, in_channels, in_orders = input_shape
+        height, width, in_channels, in_orders = input_shape
 
-        return width, height, self.out_channels, len(self.out_orders)
+        return height, width, self.out_channels, len(self.out_orders)
 
     def generate_filters(self):
         # Dictionary for filters from input order to output order
@@ -63,10 +80,10 @@ class Conv2DH(keras.layers.Layer):
         :param ms: tf.Tensor containing [m_order] orders to use
         """
         # Weights have shape [channels, fourier_depth]
-        ns = tf.constant(alternating_integers(weights.shape[1] - 1), dtype=c64)[tf.newaxis, tf.newaxis, :]
+        ns = tf.constant(alternating_integers(weights.shape[1] - 1), dtype=c64)[newaxis, newaxis, :]
 
         linspace = tf.cast(tf.linspace(- self.k_size / 2, self.k_size / 2, self.k_size), c64)
-        filter_grid = 1.j * linspace[:, tf.newaxis] + linspace[:, tf.newaxis]
+        filter_grid = 1.j * linspace[:, newaxis] + linspace[:, newaxis]
 
         radii = tf.abs(filter_grid)
         angles = tf.cast(tf.atan2(filter_grid.imag, filter_grid.real), dtype=c64)
@@ -75,9 +92,8 @@ class Conv2DH(keras.layers.Layer):
         filter_values = tf.reduce_sum(exponentials, axis=2) * tf.exp(1.j * m)
 
 
-
 def alternating_integers(n):
-    integers = [1]*n
+    integers = [1] * n
     for i in range(n):
         integers[i] *= ((i + 1) // 2) if i % 2 else -((i + 1) // 2)
     return integers
